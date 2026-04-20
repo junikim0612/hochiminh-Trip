@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#EFEAE0">
+<meta name="supported-color-schemes" content="light">
+<title>호치민 · 호짬 여행 일정</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #EFEAE0;
+  --card: #FFFFFF;
+  --ink: #1A1A1A;
+  --ink-2: #3A3A3A;
+  --ink-3: #707070;
+  --line: #E0DCD2;
+  --line-soft: #ECE8DD;
+
+  --meal: #D97333;
+  --spot: #5A8F66;
+  --move: #7A7570;
+  --rest: #5A8B8E;
+  --flight: #B8874B;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+    --bg: #EFEAE0;
+    --card: #FFFFFF;
+    --ink: #1A1A1A;
+  }
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  background: #EFEAE0 !important;
+  color: #1A1A1A !important;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  font-weight: 400;
+  min-height: 100vh;
+}
+
+/* ═══════ HEADER ═══════ */
+.header {
+  padding: 48px 24px 28px;
+  text-align: center;
+}
+.header-sub {
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 1.5px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.header-title .flag {
+  display: inline-block;
+  width: 34px;
+  height: 22px;
+  margin-left: 10px;
+  vertical-align: -3px;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.header-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.15;
+}
+.header-ko {
+  font-size: 14px;
+  color: var(--ink-2);
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+/* ═══════ FLIGHTS SUMMARY ═══════ */
+.flights {
+  max-width: 500px;
+  margin: 24px auto 0;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.flight-box {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+.flight-label {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.flight-route {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.3px;
+  margin-bottom: 2px;
+}
+.flight-time {
+  font-size: 12px;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+.flight-term {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 7px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--flight);
+  background: rgba(184, 135, 75, 0.1);
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+.flight-date {
+  max-width: 500px;
+  margin: 10px auto 0;
+  padding: 0 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.flight-date b { color: var(--flight); font-weight: 700; }
+
+/* ═══════ INTRO OVERLAY ═══════ */
+#intro {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 20px;
+  color: #fff;
+  transition: opacity 1.4s ease, visibility 1.4s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+#intro.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.intro-deco {
+  width: 48px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, #D4A747, transparent);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: introFade 1s ease 0.3s forwards;
+}
+.intro-text {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: introSlideUp 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  text-align: center;
+  line-height: 1.4;
+}
+.intro-sub {
+  font-family: 'Fraunces', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(255,255,255,0.4);
+  margin-top: -24px;
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: introFade 1.2s ease 1.4s forwards;
+  letter-spacing: 0.5px;
+}
+.intro-hint {
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  opacity: 0;
+  animation: introFade 1s ease 2s forwards, pulse 2.5s ease-in-out 3s infinite;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.intro-hint::before,
+.intro-hint::after {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+}
+@keyframes introFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes introSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* 본문 페이드인 */
+body > * {
+  animation: fadeInContent 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes fadeInContent {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+.music-player {
+  max-width: 500px;
+  margin: 14px auto 0;
+  padding: 0 20px;
+}
+.music-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border-radius: 10px;
+  padding: 10px 14px 10px 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.music-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: #1a1a1a;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: inherit;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.music-btn:active { transform: scale(0.92); }
+.music-btn svg { width: 14px; height: 14px; }
+.music-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.music-marquee {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.music-artist {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.music-note {
+  font-size: 16px;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+/* ═══════ RATE BOX ═══════ */
+.rate-box {
+  max-width: 500px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+}
+.rate-inner {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 16px 10px;
+}
+.rate-title {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-bottom: 8px;
+}
+.rate-title b { color: var(--ink); font-weight: 700; }
+.rate-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 14px;
+}
+.rate-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rate-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+.rate-row .k { color: var(--ink-3); font-weight: 500; }
+.rate-row .v { color: var(--ink); font-weight: 600; }
+.rate-tip {
+  font-size: 11.5px;
+  color: var(--ink-2);
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px dashed var(--line);
+  text-align: center;
+  font-weight: 500;
+}
+.rate-tip b { color: var(--meal); font-weight: 700; }
+
+/* ═══════ QUICK NAV ═══════ */
+.quick-nav {
+  max-width: 500px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.qn-btn {
+  display: block;
+  padding: 11px 4px;
+  font-family: inherit;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink) !important;
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  letter-spacing: -0.3px;
+}
+.qn-btn:link, .qn-btn:visited, .qn-btn:hover, .qn-btn:focus {
+  text-decoration: none !important;
+  color: var(--ink) !important;
+  -webkit-text-decoration: none !important;
+}
+.qn-btn:active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: white !important;
+  transform: scale(0.97);
+}
+.qn-btn:active .qn-date { color: rgba(255,255,255,0.7); }
+.qn-day {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  letter-spacing: -0.3px;
+}
+.qn-date {
+  font-size: 10.5px;
+  color: var(--ink-3);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════ DAY CARD ═══════ */
+.day {
+  max-width: 500px;
+  margin: 24px auto 0;
+  padding: 0 16px;
+  scroll-margin-top: 16px;
+}
+.day-card {
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  padding: 28px 20px 24px;
+  box-shadow: 0 2px 14px -4px rgba(0,0,0,0.04);
+}
+.day-top {
+  text-align: center;
+  background: linear-gradient(135deg, #7A4E2D 0%, #4A2E18 100%);
+  margin: -28px -20px 18px;
+  padding: 26px 20px 18px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  border-bottom: 1px solid rgba(184, 135, 75, 0.3);
+}
+.day-name {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: #FFFFFF;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.day-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 2px;
+}
+.day-week {
+  font-size: 11px;
+  color: rgba(232, 205, 165, 0.75);
+  font-weight: 500;
+  margin-bottom: 10px;
+  letter-spacing: 0.3px;
+}
+.day-theme {
+  font-size: 13px;
+  font-weight: 600;
+  color: #E8CDA5;
+  letter-spacing: -0.2px;
+}
+
+/* ═══════ TIMELINE ITEM ═══════ */
+.item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  align-items: flex-start;
+}
+.item-time {
+  flex-shrink: 0;
+  width: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.3px;
+  line-height: 1.5;
+  padding-top: 1px;
+}
+.item-body {
+  flex: 1;
+  min-width: 0;
+}
+.item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.45;
+}
+.badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.55;
+  flex-shrink: 0;
+  letter-spacing: -0.1px;
+}
+.badge.meal   { background: var(--meal); }
+.badge.spot   { background: var(--spot); }
+.badge.move   { background: var(--move); }
+.badge.rest   { background: var(--rest); }
+.badge.flight { background: var(--flight); }
+
+.item-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+  line-height: 1.4;
+}
+.item-note {
+  font-size: 12.5px;
+  color: var(--ink-2);
+  margin-top: 2px;
+  letter-spacing: -0.1px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.item-sub {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  margin-top: 2px;
+  line-height: 1.5;
+}
+
+/* Inline image - small */
+.item-img {
+  margin-top: 8px;
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #EEE9DE;
+  position: relative;
+}
+.item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.item-img[data-fallback]::after {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--fg, #CC4529) 0%, var(--fg2, #8B3220) 100%);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px;
+  text-align: center;
+}
+.g-red    { --fg: #CC4529; --fg2: #8B3220; }
+.g-teal   { --fg: #4A7A76; --fg2: #2F5451; }
+.g-amber  { --fg: #C48B3F; --fg2: #8A5F2A; }
+.g-green  { --fg: #6B8E60; --fg2: #4A6542; }
+.g-plum   { --fg: #8A5A7A; --fg2: #5F3E54; }
+.g-navy   { --fg: #3E5876; --fg2: #273B52; }
+
+/* Divider within a day */
+.divider {
+  border: none;
+  border-top: 1px dashed var(--line);
+  margin: 12px 0;
+}
+
+/* Flight strip */
+.flight-strip {
+  background: #2A2623;
+  color: white;
+  padding: 10px 18px 14px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+.fs-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.fs-badge {
+  display: inline-block;
+  background: var(--flight);
+  color: white;
+  padding: 1px 8px;
+  border-radius: 3px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+.fs-airline {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+}
+.fs-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  padding: 2px 0;
+}
+.fs-city {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.fs-center {
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+/* ═══════ LEGEND ═══════ */
+.legend {
+  max-width: 500px;
+  margin: 28px auto 0;
+  padding: 16px 20px;
+  display: flex;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--ink-2);
+  font-weight: 500;
+}
+.legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+/* ═══════ FOOTER ═══════ */
+.footer {
+  padding: 20px 24px 60px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+/* Back to top */
+.to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: var(--ink);
+  color: white !important;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none !important;
+  box-shadow: 0 4px 16px -4px rgba(0,0,0,0.25);
+  z-index: 50;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+  font-size: 15px;
+}
+.to-top.visible { opacity: 1; visibility: visible; }
+
+@media (max-width: 380px) {
+  .header-title { font-size: 28px; }
+  .day-name { font-size: 20px; }
+  .item-time { width: 40px; font-size: 13px; }
+  .qn-day { font-size: 12px; }
+  .item-img { height: 180px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-sub">Travel Itinerary · 3N4D</div>
+  <div class="header-title">호치민 여행<svg class="flag flag-right" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg" aria-label="베트남"><rect width="30" height="20" fill="#DA251D"/><polygon fill="#FFFF00" points="15,4 16.4,8.2 20.7,8.2 17.2,10.7 18.5,14.9 15,12.3 11.5,14.9 12.8,10.7 9.3,8.2 13.6,8.2"/></svg></div>
+  <div class="header-ko">가족여행</div>
+</header>
+
+<!-- FLIGHTS SUMMARY -->
+<div class="flights">
+  <div class="flight-box">
+    <div class="flight-label">가는편 · KE471</div>
+    <div class="flight-route">ICN → SGN</div>
+    <div class="flight-time">09:05 → 12:35</div>
+    <div class="flight-term">T2 → T2</div>
+  </div>
+  <div class="flight-box">
+    <div class="flight-label">오는편 · KE472</div>
+    <div class="flight-route">SGN → ICN</div>
+    <div class="flight-time">13:55 → 21:25</div>
+    <div class="flight-term">T2 → T2</div>
+  </div>
+</div>
+
+<!-- 음악 (UI 제거, 자동재생용 audio만 유지) -->
+<div style="display:none;">
+  <div>
+    <button class="music-btn" type="button" onclick="toggleMusic()" style="display:none;">
+      <svg id="music-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="music-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+    </button>
+    <div>
+      <div></div>
+      <div></div>
+    </div>
+    <div></div>
+    <audio id="bg-music" loop preload="metadata">
+      <source src="audio/audio01_cb155bfd7d.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+</div>
+
+<!-- QUICK NAV -->
+<nav class="quick-nav">
+  <button class="qn-btn" type="button" onclick="goDay('day1')"><div class="qn-day">첫째날</div><div class="qn-date">5/9 토</div></button>
+  <button class="qn-btn" type="button" onclick="goDay('day2')"><div class="qn-day">둘째날</div><div class="qn-date">5/10 일</div></button>
+  <button class="qn-btn" type="button" onclick="goDay('day3')"><div class="qn-day">셋째날</div><div class="qn-date">5/11 월</div></button>
+  <button class="qn-btn" type="button" onclick="goDay('day4')"><div class="qn-day">넷째날</div><div class="qn-date">5/12 화</div></button>
+</nav>
+
+<!-- 환율 -->
+<div class="rate-box">
+  <div class="rate-inner">
+    <div class="rate-title">💱 환율 <b>(2026.4 기준 · 1,000원 ≈ 17,500동)</b></div>
+    <div class="rate-grid">
+      <div class="rate-col">
+        <div class="rate-row"><span class="k">₩1,000</span><span class="v">17,500동</span></div>
+        <div class="rate-row"><span class="k">₩10,000</span><span class="v">175,000동</span></div>
+      </div>
+      <div class="rate-col">
+        <div class="rate-row"><span class="k">10,000동</span><span class="v">₩570</span></div>
+        <div class="rate-row"><span class="k">100,000동</span><span class="v">₩5,700</span></div>
+      </div>
+    </div>
+    <div class="rate-tip">💡 빠른 계산 — <b>1,000동 ≈ 57원</b> · 0 세 개 빼고 반으로</div>
+  </div>
+</div>
+
+<!-- ════════ 첫째날 ════════ -->
+<section class="day" id="day1">
+  <div class="day-card">
+    <div class="day-top">
+      <div class="day-name">첫째날</div>
+      <div class="day-date">5월 9일</div>
+      <div class="day-week">Saturday</div>
+      <div class="day-theme">출발 · 도착 · 시내 야경</div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">07:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">인천공항 도착</div></div>
+        <div class="item-note">제2여객터미널(T2) · 대한항공</div>
+      </div>
+    </div>
+
+    <div class="flight-strip">
+      <div class="fs-top">
+        <span class="fs-badge">항공편</span>
+        <span class="fs-airline">Korean Air</span>
+      </div>
+      <div class="fs-row">
+        <div class="fs-city">ICN</div>
+        <div class="fs-center">09:05 ─ ✈ ─ 12:35</div>
+        <div class="fs-city">SGN</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">13:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">탄손낫 공항 도착</div></div>
+        <div class="item-note">T2 국제선 · 입국심사 · 짐찾기 · Grab XL</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">14:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge meal">식사</span><div class="item-title">Pizza 4P's Ben Thanh</div></div>
+        <div class="item-note">부라타 + 4치즈 피자 · 크랩 파스타 🍕</div>
+        <div class="item-sub">8-15 Lê Thánh Tôn, Bến Nghé, Quận 1</div>
+        
+        <div class="item-img g-red" data-label="Pizza 4P's">
+          <img src="images/img01_1c21e5ca11.png" alt="Pizza 4P's" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">16:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">셔우드 레지던스 체크인</div></div>
+        <div class="item-note">프렌치 콜로니얼 스타일 호텔 🏨</div>
+        <div class="item-sub">127 Pasteur, Võ Thị Sáu, Quận 3</div>
+        <div class="item-img g-teal" data-label="Sherwood Residence">
+          <img src="images/img02_a3786adb8b.png" alt="Sherwood Residence" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="item">
+      <div class="item-time">17:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge spot">관광</span><div class="item-title">사이공 노트르담 대성당</div></div>
+        <div class="item-note">호텔에서 도보 10분 · 프랑스 식민지 벽돌 건축 ⛪</div>
+        <div class="item-sub">01 Công xã Paris, Bến Nghé, Quận 1</div>
+        <div class="item-img g-red" data-label="노트르담 대성당">
+          <img src="images/img03_e376024a84.jpg" alt="노트르담" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">17:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge spot">관광</span><div class="item-title">사이공 중앙우체국</div></div>
+        <div class="item-note">대성당 바로 옆 · 에펠 설계 아치 천장 📮</div>
+        <div class="item-sub">02 Công xã Paris, Bến Nghé, Quận 1</div>
+        <div class="item-img g-amber" data-label="Central Post Office">
+          <img src="images/img04_c71c32f3af.png" alt="중앙우체국" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">18:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge spot">관광</span><div class="item-title">카페 아파트먼트</div></div>
+        <div class="item-note">낡은 아파트를 개조한 루프탑 카페 단지 · 5층 이상 🌅</div>
+        <div class="item-sub">42 Nguyễn Huệ, Bến Nghé, Quận 1 · 일몰 18:15</div>
+        <div class="item-img g-amber" data-label="Cafe Apartment">
+          <img src="images/img05_d69e672718.png" alt="Cafe Apartment" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">19:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge meal">식사</span><div class="item-title">Bếp Mẹ Ỉn 2</div></div>
+        <div class="item-note">소고기 쌀국수 · 반쎄오 · 프레시 스프링롤 🍜</div>
+        <div class="item-sub">136-138 Lê Thánh Tôn, Quận 1</div>
+        
+        <div class="item-img g-green" data-label="Bếp Mẹ Ỉn">
+          <img src="images/img06_9645f27c91.png" alt="Bếp Mẹ Ỉn" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">21:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge spot">관광</span><div class="item-title">응우옌후에 워킹스트리트</div></div>
+        <div class="item-note">호치민 시청 라이트업 · 분수 야경 ✨</div>
+        <div class="item-sub">Nguyễn Huệ, Bến Nghé, Quận 1</div>
+        <div class="item-img g-navy" data-label="Nguyễn Huệ Night">
+          <img src="images/img07_26b5c49453.png" alt="응우옌후에 야경" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">22:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge rest">휴식</span><div class="item-title">셔우드 복귀 · 취침</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 둘째날 ════════ -->
+<section class="day" id="day2">
+  <div class="day-card">
+    <div class="day-top">
+      <div class="day-name">둘째날</div>
+      <div class="day-date">5월 10일</div>
+      <div class="day-week">Sunday</div>
+      <div class="day-theme">시내 관광 · 스파 · 크루즈</div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">09:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge meal">식사</span><div class="item-title">셔우드 조식</div></div>
+        <div class="item-note">호텔 레스토랑 뷔페</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">11:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge spot">관광</span><div class="item-title">탄딘 핑크교회</div></div>
+        <div class="item-note">1876년 · 로마네스크 · 외관 사진 25분 💗</div>
+        <div class="item-sub">289 Hai Bà Trưng, Tân Định, Quận 3</div>
+        <div class="item-img g-plum" data-label="핑크교회">
+          <img src="images/img08_00ade3ac2a.png" alt="핑크교회" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">12:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge spot">관광</span><div class="item-title">벤탄 시장</div></div>
+        <div class="item-note">커피 원두 · 말린 망고 · 캐슈넛 🛍</div>
+        <div class="item-sub">Chợ Bến Thành, Bến Thành, Quận 1 · 현금(VND) 필수</div>
+        <div class="item-img g-red" data-label="벤탄 시장">
+          <img src="images/img09_bf66818cf4.png" alt="벤탄 시장" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">13:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge meal">식사</span><div class="item-title">Den Long Home Cooked</div></div>
+        <div class="item-note">생선 뚝배기 조림(Cá kho) · 돼지갈비 · 모닝글로리 볶음 🍲</div>
+        <div class="item-sub">130 Nguyễn Trãi, Quận 1</div>
+        
+        <div class="item-img g-green" data-label="Den Long">
+          <img src="images/img10_2f00da87d7.png" alt="Den Long" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">15:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge rest">휴식</span><div class="item-title">AN's Spa 3호점</div></div>
+        <div class="item-note">4인 동시 90분 마사지 💆</div>
+        <div class="item-sub">130 Nguyễn Thái Bình, Quận 1</div>
+        
+        <div class="item-img g-plum" data-label="AN's Spa">
+          <img src="images/img11_1cf5cd5a8d.png" alt="AN's Spa" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">17:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge rest">휴식</span><div class="item-title">호텔 복귀 · 크루즈 준비</div></div>
+        <div class="item-note">샤워 · 환복 · 휴식</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="item">
+      <div class="item-time">18:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">Saigon Port Maritime Service Center 도착</div></div>
+        <div class="item-note">호텔에서 Grab 약 15분 🚢</div>
+        <div class="item-sub">Saigon Port Maritime Service Center, 5 Nguyễn Tất Thành, Quận 4</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">19:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge meal">식사</span><div class="item-title">사이공강 디너 크루즈</div></div>
+        <div class="item-note">2시간 · 야경 · 랜드마크81 · 비텍스코 🚢</div>
+        <div class="item-img g-navy" data-label="사이공 크루즈">
+          <img src="images/img12_4edb18b9fe.png" alt="크루즈" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">21:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge rest">휴식</span><div class="item-title">셔우드 복귀</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 셋째날 ════════ -->
+<section class="day" id="day3">
+  <div class="day-card">
+    <div class="day-top">
+      <div class="day-name">셋째날</div>
+      <div class="day-date">5월 11일</div>
+      <div class="day-week">Monday</div>
+      <div class="day-theme">호짬 리조트 이동</div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">09:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge meal">식사</span><div class="item-title">셔우드 조식</div></div>
+        <div class="item-note">호텔 레스토랑 뷔페</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">11:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">체크아웃 · 호짬 출발</div></div>
+        <div class="item-note">프라이빗 기사 픽업 🚐</div>
+        <div class="item-sub">호치민 → 호짬 약 2시간 30분</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">14:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">Meliá Ho Tram 도착 · 체크인</div></div>
+        <div class="item-note">2BR 패밀리 스위트 · 오션뷰 · All-Inclusive 🏖</div>
+        <div class="item-sub">Phước Thuận, Xuyên Mộc, Bà Rịa - Vũng Tàu</div>
+        <div class="item-img g-teal" data-label="Meliá Ho Tram">
+          <img src="images/img13_df9c233eec.png" alt="Meliá" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">15:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge rest">휴식</span><div class="item-title">리조트 탐방 · 수영장</div></div>
+        <div class="item-note">이동 피로 풀기 · 풀사이드 음료</div>
+        <div class="item-img g-teal" data-label="Meliá Pool">
+          <img src="images/img14_768029cc8f.png" alt="Meliá 수영장" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="item">
+      <div class="item-time">17:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge rest">휴식</span><div class="item-title">호텔 스파 예약</div></div>
+        <div class="item-note">리조트 내 스파 💆</div>
+        <div class="item-img g-plum" data-label="호텔 스파">
+          <img src="images/img15_00fe42fc4a.jpg" alt="호텔 스파" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">19:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge meal">식사</span><div class="item-title">리조트 내 저녁</div></div>
+        <div class="item-note">올인클루시브 🍽</div>
+        <div class="item-img g-navy" data-label="호텔 저녁">
+          <img src="images/img16_12466d007a.jpg" alt="호텔 저녁" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">21:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge rest">휴식</span><div class="item-title">취침</div></div>
+        <div class="item-note">하루 마무리 🌙</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 넷째날 ════════ -->
+<section class="day" id="day4">
+  <div class="day-card">
+    <div class="day-top">
+      <div class="day-name">넷째날</div>
+      <div class="day-date">5월 12일</div>
+      <div class="day-week">Tuesday</div>
+      <div class="day-theme">귀국</div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">07:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge meal">식사</span><div class="item-title">리조트 조식</div></div>
+        <div class="item-note">오션뷰 테라스 · 마지막 아침 🌊</div>
+        <div class="item-img g-amber" data-label="Meliá Breakfast">
+          <img src="images/img17_96f43a7024.png" alt="멜리아 조식" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">08:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge spot">관광</span><div class="item-title">마지막 비치 산책</div></div>
+        <div class="item-note">바다 한 번 더 🏖</div>
+        <div class="item-img g-amber" data-label="호짬 비치">
+          <img src="images/img18_37119d15c8.png" alt="호짬 비치" loading="lazy" onerror="this.parentNode.setAttribute('data-fallback','true');this.style.display='none';">
+        </div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">09:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">체크아웃 · 짐 정리</div></div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">09:30</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">프라이빗 기사 픽업 · 공항 출발</div></div>
+        <div class="item-note">리조트 로비 픽업 🚐</div>
+        <div class="item-sub">호짬 → 공항 약 2시간 30분</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">12:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">탄손낫 공항 도착</div></div>
+        <div class="item-note">T2 국제선 · 체크인 · 출국심사 · 면세점</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">13:00</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge meal">식사</span><div class="item-title">공항 점심 · 베트남 커피 한 잔</div></div>
+      </div>
+    </div>
+
+    <div class="flight-strip">
+      <div class="fs-top">
+        <span class="fs-badge">항공편</span>
+        <span class="fs-airline">Korean Air 472</span>
+      </div>
+      <div class="fs-row">
+        <div class="fs-city">SGN</div>
+        <div class="fs-center">13:55 ─ ✈ ─ 21:25</div>
+        <div class="fs-city">ICN</div>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-time">21:25</div>
+      <div class="item-body">
+        <div class="item-head"><span class="badge move">이동</span><div class="item-title">인천공항 도착 · 귀가</div></div>
+        <div class="item-note">T2 입국 · 4일간의 여행 마무리</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  Have a great trip! 🌴
+</div>
+
+<a href="#" class="to-top" id="toTop">↑</a>
+
+<script>
+function goDay(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleMusic() {
+  const audio = document.getElementById('bg-music');
+  const playIcon = document.getElementById('music-play');
+  const pauseIcon = document.getElementById('music-pause');
+  if (audio.paused) {
+    audio.play().then(() => {
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+    }).catch(err => console.log('재생 실패:', err));
+  } else {
+    audio.pause();
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+  }
+}
+
+// 페이지 어디든 첫 클릭/터치 시 BGM 자동 재생 (브라우저 autoplay 정책 대응)
+(function() {
+  let started = false;
+  function startMusic() {
+    if (started) return;
+    started = true;
+    const audio = document.getElementById('bg-music');
+    const playIcon = document.getElementById('music-play');
+    const pauseIcon = document.getElementById('music-pause');
+    if (audio) {
+      audio.volume = 0;
+      audio.play().then(() => {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        let v = 0;
+        const fadeIn = setInterval(() => {
+          v += 0.05;
+          if (v >= 0.7) { v = 0.7; clearInterval(fadeIn); }
+          audio.volume = v;
+        }, 100);
+      }).catch(err => console.log('재생 실패:', err));
+    }
+  }
+  // 사용자가 페이지 어디든 처음 클릭/터치하면 재생
+  document.addEventListener('click', startMusic, { once: true });
+  document.addEventListener('touchend', startMusic, { once: true });
+  document.addEventListener('keydown', startMusic, { once: true });
+})();
+
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 600) toTop.classList.add('visible');
+  else toTop.classList.remove('visible');
+});
+toTop.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>
