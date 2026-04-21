@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v16 · BGM → wave to earth · bad -->
+<!-- v18 · iOS 자동재생 수정 (display:none → 투명 배치) -->
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -931,23 +931,11 @@ body.lb-open { overflow: hidden; }
   </div>
 </div>
 
-<!-- 음악 (UI 제거, 자동재생용 audio만 유지) -->
-<div style="display:none;">
-  <div>
-    <button class="music-btn" type="button" onclick="toggleMusic()" style="display:none;">
-      <svg id="music-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-      <svg id="music-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
-    </button>
-    <div>
-      <div></div>
-      <div></div>
-    </div>
-    <div></div>
-    <audio id="bg-music" loop preload="metadata">
-      <source src="audio/wave-to-earth-bad.mp3" type="audio/mpeg">
-    </audio>
-  </div>
-</div>
+<!-- 음악 (iOS 호환 - display:none 대신 보이지 않게 배치) -->
+<audio id="bg-music" loop autoplay preload="auto" playsinline
+       style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;">
+  <source src="audio/wave-to-earth-bad.mp3" type="audio/mpeg">
+</audio>
 
 <!-- QUICK NAV -->
 <nav class="quick-nav">
@@ -1407,17 +1395,11 @@ function goDay(id) {
 
 function toggleMusic() {
   const audio = document.getElementById('bg-music');
-  const playIcon = document.getElementById('music-play');
-  const pauseIcon = document.getElementById('music-pause');
+  if (!audio) return;
   if (audio.paused) {
-    audio.play().then(() => {
-      playIcon.style.display = 'none';
-      pauseIcon.style.display = 'block';
-    }).catch(() => {});
+    audio.play().catch(() => {});
   } else {
     audio.pause();
-    playIcon.style.display = 'block';
-    pauseIcon.style.display = 'none';
   }
 }
 
@@ -1426,28 +1408,25 @@ function toggleMusic() {
   let started = false;
   function startMusic() {
     if (started) return;
-    started = true;
     const audio = document.getElementById('bg-music');
-    const playIcon = document.getElementById('music-play');
-    const pauseIcon = document.getElementById('music-pause');
-    if (audio) {
-      audio.volume = 0;
-      audio.play().then(() => {
-        playIcon.style.display = 'none';
-        pauseIcon.style.display = 'block';
-        let v = 0;
-        const fadeIn = setInterval(() => {
-          v += 0.05;
-          if (v >= 0.7) { v = 0.7; clearInterval(fadeIn); }
-          audio.volume = v;
-        }, 100);
-      }).catch(() => {});
-    }
+    if (!audio) return;
+    started = true;
+    audio.volume = 0;
+    audio.play().then(() => {
+      let v = 0;
+      const fadeIn = setInterval(() => {
+        v += 0.05;
+        if (v >= 0.7) { v = 0.7; clearInterval(fadeIn); }
+        audio.volume = v;
+      }, 100);
+    }).catch(() => {
+      started = false; // 실패 시 재시도 가능하게
+    });
   }
   // 사용자가 페이지 어디든 처음 클릭/터치하면 재생
-  document.addEventListener('click', startMusic, { once: true });
-  document.addEventListener('touchend', startMusic, { once: true });
-  document.addEventListener('keydown', startMusic, { once: true });
+  document.addEventListener('click', startMusic);
+  document.addEventListener('touchend', startMusic);
+  document.addEventListener('touchstart', startMusic);
 })();
 
 const toTop = document.getElementById('toTop');
